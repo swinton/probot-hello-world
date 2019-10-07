@@ -17,6 +17,7 @@
     "probot": "^9.0.0"
   },
   "devDependencies": {
+    "@zeit/ncc": "^0.20.5",
     "jest": "^23.2.0",
     "smee-client": "^1.0.1",
     "standard": "^11.0.1"

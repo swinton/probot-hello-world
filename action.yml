@@ -1,0 +1,5 @@
+name: 'Probot Hello World'
+description: 'Probot Hello World'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'

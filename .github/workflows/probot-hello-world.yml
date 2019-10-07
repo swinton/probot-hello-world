@@ -1,0 +1,19 @@
+on:
+  issues
+
+name: Probot Hello World
+
+jobs:
+  probot-hello-world:
+    name: Probot Hello World
+    runs-on: ubuntu-latest
+    steps:
+    - name: Context
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
+      run: |
+        echo "$GITHUB_CONTEXT"
+    - name: Checkout
+      uses: actions/checkout@v1.0.0
+    - name: Say Hello
+      uses: ./

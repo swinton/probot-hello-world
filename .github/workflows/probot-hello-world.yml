@@ -20,3 +20,5 @@ jobs:
         npm ci
     - name: Run
       uses: ./
+      with:
+        GITHUB_TOKEN: ${{ github.GITHUB_TOKEN }}

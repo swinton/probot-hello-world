@@ -10,7 +10,6 @@ const program = require('commander')
 const core = require('@actions/core');
 
 const { createProbot } = require('probot')
-const { findPrivateKey } = require('probot/lib/private-key')
 
 program
   .usage('[options] [path/to/app.js...]')
@@ -18,7 +17,6 @@ program
   .option('-p, --payload-path <payload-path>', 'Path to the event payload', process.env.GITHUB_EVENT_PATH)
   .option('-t, --token <access-token>', 'Access token', process.env.GITHUB_TOKEN)
   .option('-a, --app <id>', 'ID of the GitHub App', process.env.APP_ID)
-  .option('-P, --private-key <file>', 'Path to certificate of the GitHub App', findPrivateKey)
   .parse(process.argv)
 
 const githubToken = program.token
@@ -27,16 +25,11 @@ if (!program.event || !program.payloadPath) {
   program.help()
 }
 
-const cert = findPrivateKey()
-if (!githubToken && (!program.app || !cert)) {
-  console.warn('No token specified and no certificate found, which means you will not be able to do authenticated requests to GitHub')
-}
-
 const payload = require(path.resolve(program.payloadPath))
 
 const probot = createProbot({
   id: program.app,
-  cert,
+  cert: null,
   githubToken: githubToken
 })
 

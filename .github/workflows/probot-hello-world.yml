@@ -15,5 +15,8 @@ jobs:
         echo "$GITHUB_CONTEXT"
     - name: Checkout
       uses: actions/checkout@v1.0.0
+    - name: Install
+      run: |
+        npm ci
     - name: Say Hello
       uses: ./

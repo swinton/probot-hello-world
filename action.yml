@@ -3,4 +3,4 @@ name: 'Probot Hello World'
 description: 'Probot Hello World'
 runs:
   using: 'node12'
-  main: 'action.js'
+  main: './node_modules/probot/bin/probot-receive.js'

@@ -10,8 +10,8 @@ const program = require('commander')
 
 const core = require('@actions/core');
 
-const { findPrivateKey } = require('../lib/private-key')
-const { createProbot } = require('../')
+const { createProbot } = require('probot')
+const { findPrivateKey } = require('probot/lib/private-key')
 
 program
   .usage('[options] [path/to/app.js...]')

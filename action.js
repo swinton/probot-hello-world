@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 // Usage: probot receive -e push -p path/to/payload app.js
 
-require('dotenv').config()
 process.env.DISABLE_STATS = 'true'
 
 const path = require('path')

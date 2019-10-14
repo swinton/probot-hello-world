@@ -1,5 +1,6 @@
+# https://help.github.com/en/articles/metadata-syntax-for-github-actions
 name: 'Probot Hello World'
 description: 'Probot Hello World'
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
+  using: 'node12'
+  main: 'action.js'

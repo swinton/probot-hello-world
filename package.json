@@ -11,7 +11,8 @@
   "scripts": {
     "dev": "nodemon --exec \"npm start\"",
     "start": "probot run ./index.js",
-    "test": "jest && standard"
+    "test": "jest && standard",
+    "receive": "probot receive -e issues -p fixtures/issues.opened.json ./index.js"
   },
   "dependencies": {
     "probot": "^9.0.0"

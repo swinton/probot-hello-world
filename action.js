@@ -19,7 +19,9 @@ const probot = createProbot({
   githubToken: githubToken
 });
 
-// probot.setup(program.args);
+probot.setup([ './index.js' ]);
+
+probot.logger.info('Receiving event', event)
 probot.receive({ name: event, payload, id: uuid.v4() }).catch(() => {
   // Process must exist non-zero to indicate that the action failed to run
   process.exit(1)

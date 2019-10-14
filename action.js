@@ -41,9 +41,10 @@ const probot = createProbot({
   githubToken: githubToken
 })
 
-core.debug(`program.args ${ JSON.stringify(program.args) }`)
-
-probot.setup(program.args)
+// TODO: allow path to handler to be specified externally
+const args = program.args.length && program.args || [ './index.js' ]
+core.debug(`args ${ JSON.stringify(args) }`)
+probot.setup(args)
 
 probot.logger.debug('Receiving event', program.event)
 probot.receive({ name: program.event, payload, id: uuid.v4() }).catch((err) => {

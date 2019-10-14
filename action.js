@@ -1,34 +1,52 @@
-const path = require('path');
-const uuid = require('uuid');
+#!/usr/bin/env node
+// Usage: probot receive -e push -p path/to/payload app.js
+
+require('dotenv').config()
+process.env.DISABLE_STATS = 'true'
+
+const path = require('path')
+const uuid = require('uuid')
+const program = require('commander')
 
 const core = require('@actions/core');
 
-const { createProbot } = require('probot');
+const { findPrivateKey } = require('../lib/private-key')
+const { createProbot } = require('../')
 
-// The name of the webhook event that triggered the workflow.
-const event = process.env.GITHUB_EVENT_NAME;
-core.debug(`Got event: ${ event }`);
+program
+  .usage('[options] [path/to/app.js...]')
+  .option('-e, --event <event-name>', 'Event name', process.env.GITHUB_EVENT_NAME)
+  .option('-p, --payload-path <payload-path>', 'Path to the event payload', process.env.GITHUB_EVENT_PATH)
+  .option('-t, --token <access-token>', 'Access token', process.env.GITHUB_TOKEN)
+  .option('-a, --app <id>', 'ID of the GitHub App', process.env.APP_ID)
+  .option('-P, --private-key <file>', 'Path to certificate of the GitHub App', findPrivateKey)
+  .parse(process.argv)
 
-// The path of the file with the complete webhook event payload. For example, /github/workflow/event.json.
-const payloadPath = process.env.GITHUB_EVENT_PATH;
-core.debug(`Got payloadPath: ${ payloadPath }`);
+const githubToken = program.token
 
-// The GitHub App installation access token used to authenticate on behalf of the GitHub App installed on your repository
-const githubToken = process.env.GITHUB_TOKEN;
-core.debug(`Got token: ${ githubToken }`);
+if (!program.event || !program.payloadPath) {
+  program.help()
+}
 
-const payload = require(path.resolve(payloadPath));
-core.debug(`Got payload: ${ payload }`);
+const cert = findPrivateKey()
+if (!githubToken && (!program.app || !cert)) {
+  console.warn('No token specified and no certificate found, which means you will not be able to do authenticated requests to GitHub')
+}
+
+const payload = require(path.resolve(program.payloadPath))
 
 const probot = createProbot({
-  cert: null,
+  id: program.app,
+  cert,
   githubToken: githubToken
-});
+})
 
-probot.setup([ './index.js' ]);
+core.debug(`program.args ${ JSON.stringify(program.args) }`)
 
-probot.logger.info('Receiving event', event)
-probot.receive({ name: event, payload, id: uuid.v4() }).catch(() => {
-  // Process must exist non-zero to indicate that the action failed to run
-  process.exit(1)
-});
+probot.setup(program.args)
+
+probot.logger.debug('Receiving event', program.event)
+probot.receive({ name: program.event, payload, id: uuid.v4() }).catch((err) => {
+  // setFailed logs the message and sets a failing exit code
+  core.setFailed(`Action failed with error ${err}`);
+})

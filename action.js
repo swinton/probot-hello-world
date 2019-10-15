@@ -14,7 +14,7 @@ const payload = require(path.resolve(payloadPath))
 
 const probot = createProbot({
   cert: null,
-  githubToken: githubToken
+  githubToken
 })
 
 // TODO: allow path to handler to be specified externally

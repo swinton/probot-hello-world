@@ -35,10 +35,10 @@ const probot = createProbot({
 
 // TODO: allow path to handler to be specified externally
 const args = program.args.length && program.args || [ './index.js' ]
-core.debug(`args ${ JSON.stringify(args) }`)
+core.debug(`Setting up Probot with args ${ JSON.stringify(args) }`)
 probot.setup(args)
 
-probot.logger.debug('Receiving event', program.event)
+core.debug(`Receiving event ${ JSON.stringify(program.event) }`)
 probot.receive({ name: program.event, payload, id: uuid.v4() }).catch((err) => {
   // setFailed logs the message and sets a failing exit code
   core.setFailed(`Action failed with error ${err}`);

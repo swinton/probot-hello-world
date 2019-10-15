@@ -15,11 +15,9 @@ program
   .usage('[options] [path/to/app.js...]')
   .option('-e, --event <event-name>', 'Event name', process.env.GITHUB_EVENT_NAME)
   .option('-p, --payload-path <payload-path>', 'Path to the event payload', process.env.GITHUB_EVENT_PATH)
-  .option('-t, --token <access-token>', 'Access token', process.env.GITHUB_TOKEN)
-  .option('-a, --app <id>', 'ID of the GitHub App', process.env.APP_ID)
   .parse(process.argv)
 
-const githubToken = program.token
+const githubToken = process.env.GITHUB_TOKEN
 
 if (!program.event || !program.payloadPath) {
   program.help()

@@ -28,7 +28,6 @@ if (!program.event || !program.payloadPath) {
 const payload = require(path.resolve(program.payloadPath))
 
 const probot = createProbot({
-  id: program.app,
   cert: null,
   githubToken: githubToken
 })
